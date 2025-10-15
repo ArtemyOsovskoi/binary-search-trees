@@ -110,6 +110,25 @@ export class Tree {
       return this._findMinimumNode(node.leftChild); //traversal
     }
   }
+
+  //Write a find(value) function that returns the node with the given value.
+  find(value) {
+    return this._find(this.root, value);
+  }
+
+  _find(node, value) {
+    if (node == null) {
+      return null;
+    }
+    if (node.value == value) {
+      return node;
+    }
+    if (value < node.value) {
+      return this._find(node.leftChild, value);
+    } else {
+      return this._find(node.rightChild, value);
+    }
+  }
 }
 
 /* Write a buildTree(array) function that takes an array of data 
