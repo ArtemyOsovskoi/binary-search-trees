@@ -129,37 +129,65 @@ export class Tree {
       return this._find(node.rightChild, value);
     }
   }
+
+  levelOrderForEach(callback) {
+    if (typeof callback != "function") {
+      throw new Error("Callback must be a function");
+    }
+
+    //store nodes while traversing
+    let queue = [];
+    if (this.root) {
+      queue.push(this.root);
+    }
+
+    //while queue is not empty
+    while (queue.length > 0) {
+      let getNode = queue.shift();
+      //run callback on this node
+      callback(getNode);
+
+      //add left or right child to the queue
+      if (getNode.leftChild) {
+        callback(getNode.leftChild);
+      }
+      if (getNode.rightChild) {
+        callback(getNode.rightChild);
+      }
+    }
+  }
 }
 
-/* Write a buildTree(array) function that takes an array of data 
-(e.g., [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]) 
-and turns it into a balanced binary tree full of Node objects appropriately placed 
-(don’t forget to sort and remove duplicates!). 
-The buildTree function should return the level-0 root node. */
+/* Accept a callback function as a parameter. The function should throw an error if no callback is provided, so add a check at the start.
 
-//nb!root node is the middle element of sorted array
-//we're using recursion here
-/* export function buildTree(array) {
-//base case - check if array is empty
-if (array.length === 0) {
-  return null;
-}
-//find middle element of array
-let middleElement = Math.floor(array.length / 2);
+Traverse the tree in level order (breadth-first):
 
-//create a root node from middle element of array
-let middleElementValue = array[middleElement];
-let rootNode = new Node(middleElementValue);//root node with value under index of middleElement
+Use a queue (could be an array) to hold nodes to traverse.
 
-//build left subtree from left half of array
-rootNode.leftChild = buildTree(array.slice(0, middleElement));
+Start by adding the root node to the queue.
 
-//build right subtree from right half of array
-rootNode.rightChild = buildTree(array.slice(middleElement + 1));
+While the queue is not empty:
 
-//return root node
-return rootNode;
-} */
+Remove the first node from the queue.
+
+Call the callback with that node.
+
+Add the node's left and right children to the queue if they exist.
+
+Implement it using both:
+
+Iteration — with a queue and a loop.
+
+Recursion — which is more advanced and needs creative thinking about handling the queue/list during recursion.
+
+How to think about it:
+Imagine visiting the tree level by level from top to bottom, left to right.
+
+You keep track of nodes still to visit in the order they appear.
+
+Each time you visit a node, you immediately add its children in queue order.
+
+The callback lets you do anything you want with the node during traversal. */
 
 //BST visualization function
 /* export const prettyPrint = (node, prefix = '', isLeft = true) => {
