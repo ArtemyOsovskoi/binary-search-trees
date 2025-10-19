@@ -212,6 +212,31 @@ export class Tree {
     this._postOrderForEach(callback, currentNode.rightChild);
     callback(currentNode);
   }
+
+  height(value) {
+    let node = this.find(value);
+
+    if (node == null) return null;
+
+    return this._height(node);
+  }
+  _height(node) {
+    if (node == null) return 0;
+
+    //leaf node - height 0, base case
+    if (node.leftChild == null && node.rightChild == null) {
+      return 0;
+    }
+
+    //recursive step
+    let leftHeight = this._height(node.leftChild);
+    let rightHeight = this._height(node.rightChild);
+
+    //calculate height
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
+
+  depth(value) {}
 }
 
 //BST visualization function
