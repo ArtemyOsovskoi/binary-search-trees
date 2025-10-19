@@ -156,38 +156,63 @@ export class Tree {
       }
     }
   }
+
+  //left - root - right
+  inOrderForEach(callback) {
+    if (typeof callback != "function") {
+      throw new Error("Callback must be a function");
+    }
+
+    _inOrderForEach(callback, this.root);
+  }
+  _inOrderForEach(callback, currentNode) {
+    //base case
+    if (currentNode == null) return null;
+
+    //recursive step
+    this._inOrderForEach(callback, currentNode.leftChild);
+    callback(currentNode);
+    this._inOrderForEach(callback, currentNode.rightChild);
+  }
+
+  //root - left -right
+  preOrderForEach(callback) {
+    if (typeof callback != "function") {
+      throw new Error("Callback must be a function");
+    }
+
+    //start recursion at the root node with helper function
+    this._preOrderForEach(callback, this.root);
+  }
+
+  _preOrderForEach(callback, currentNode) {
+    //base case
+    if (currentNode == null) return null;
+
+    //recursive step
+    callback(currentNode);
+    this._preOrderForEach(callback, currentNode.leftChild);
+    this._preOrderForEach(callback, currentNode.rightChild);
+  }
+
+  //left - right - root
+  postOrderForEach(callback) {
+    if (typeof callback != "function") {
+      throw new Error("Callback must be a function");
+    }
+
+    _postOrderForEach(callback, this.root);
+  }
+  _postOrderForEach(callback, currentNode) {
+    //base case
+    if (currentNode == null) return null;
+
+    //recursive step
+    this._postOrderForEach(callback, currentNode.leftChild);
+    this._postOrderForEach(callback, currentNode.rightChild);
+    callback(currentNode);
+  }
 }
-
-/* Accept a callback function as a parameter. The function should throw an error if no callback is provided, so add a check at the start.
-
-Traverse the tree in level order (breadth-first):
-
-Use a queue (could be an array) to hold nodes to traverse.
-
-Start by adding the root node to the queue.
-
-While the queue is not empty:
-
-Remove the first node from the queue.
-
-Call the callback with that node.
-
-Add the node's left and right children to the queue if they exist.
-
-Implement it using both:
-
-Iteration — with a queue and a loop.
-
-Recursion — which is more advanced and needs creative thinking about handling the queue/list during recursion.
-
-How to think about it:
-Imagine visiting the tree level by level from top to bottom, left to right.
-
-You keep track of nodes still to visit in the order they appear.
-
-Each time you visit a node, you immediately add its children in queue order.
-
-The callback lets you do anything you want with the node during traversal. */
 
 //BST visualization function
 /* export const prettyPrint = (node, prefix = '', isLeft = true) => {
