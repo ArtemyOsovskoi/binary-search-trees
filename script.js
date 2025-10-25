@@ -236,19 +236,22 @@ export class Tree {
     return Math.max(leftHeight, rightHeight) + 1;
   }
 
-  depth(value) {}
-}
+  depth(value) {
+    return this._depth(this.root, value, 0);
+  }
+  _depth(node, value, depth) {
+    if (node == null) return null;
 
-//BST visualization function
-/* export const prettyPrint = (node, prefix = '', isLeft = true) => {
-  if (node === null) {
-    return;
+    if (node.value == value) {
+      return depth;
+    }
+
+    let left = this._depth(node.leftChild, value, depth + 1);
+    let right = this._depth(node.rightChild, value, depth + 1);
+
+    if (left != null) {
+      return left;
+    }
+    return right;
   }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
-  }
-  console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
-  }
-}; */
+}
