@@ -254,4 +254,31 @@ export class Tree {
     }
     return right;
   }
+
+  isBalanced() {
+    return this._isBalanced(this.root);
+  }
+  _isBalanced(node) {
+    if (node == null) return true; //empty node or tree is balanced
+
+    let leftHeight = this.height(node.leftChild ? node.leftChild.value : null);
+
+    let rightHeight = this.height(
+      node.rightChild ? node.rightChild.value : null,
+    );
+
+    if (Math.abs(leftHeight - rightHeight) > 1) {
+      return false;
+    }
+
+    return (
+      this._isBalanced(node.leftChild) && this._isBalanced(node.rightChild)
+    );
+  }
+
+  rebalance() {
+    let sortedArray = [];
+    this.inOrderForEach((value) => sortedArray.push(value));
+    this.root = this.buildTree(sortedArray);
+  }
 }

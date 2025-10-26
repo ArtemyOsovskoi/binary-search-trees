@@ -1,8 +1,27 @@
-import Node from "./script.js";
-import { Tree } from "./script.js";
-import { prettyPrint } from "./script.js";
-import { buildTree } from "./script.js";
+import { Tree } from "./script";
 
-let array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-buildTree(array);
-prettyPrint(buildTree());
+const prettyPrint = (node, prefix = "", isLeft = true) => {
+  if (node === null) {
+    return;
+  }
+  if (node.right !== null) {
+    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+  }
+  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+  if (node.left !== null) {
+    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  }
+};
+
+function randomArray() {
+  let randomLength = Math.floor(Math.random() * 100) + 1;
+  let array = [];
+  for (let index = 0; index < randomLength; index++) {
+    array.push(Math.floor(Math.random() * 100) + 1);
+  }
+  return array;
+}
+
+//let randomArray = [0, 5, 12, 41, 22, 72, 89, 41, 33, 51, 6, 2, 14];
+let newTree = new Tree(randomArray());
+console.log(newTree.isBalanced());
