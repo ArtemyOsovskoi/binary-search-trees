@@ -1,13 +1,12 @@
-export default class Node {
-  constructor(data) {
+export class Node {
+  constructor(value) {
     this.leftChild = null; //left child reference
     this.rightChild = null; //right child reference
-    this.data = data; //data stored in node
-    this.key = key; //key to determine node (id)
+    this.value = value; //data stored in node
   }
 }
 
-export class Tree {
+export default class Tree {
   constructor(array) {
     this.root = this.buildTree(array); //using return value of buildTree();
   }
@@ -25,10 +24,10 @@ export class Tree {
     let rootNode = new Node(middleElementValue); //root node with value under index of middleElement
 
     //build left subtree from left half of array
-    rootNode.leftChild = buildTree(array.slice(0, middleElement));
+    rootNode.leftChild = this.buildTree(array.slice(0, middleElement));
 
     //build right subtree from right half of array
-    rootNode.rightChild = buildTree(array.slice(middleElement + 1));
+    rootNode.rightChild = this.buildTree(array.slice(middleElement + 1));
 
     //return root node
     return rootNode;
@@ -130,7 +129,7 @@ export class Tree {
     }
   }
 
-  levelOrderForEach(callback) {
+  /*   levelOrderForEach(callback) {
     if (typeof callback != "function") {
       throw new Error("Callback must be a function");
     }
@@ -155,6 +154,28 @@ export class Tree {
         callback(getNode.rightChild);
       }
     }
+  } */
+  levelOrderForEach(callback) {
+    if (typeof callback != "function") {
+      throw new Error("Callback must be a function");
+    }
+
+    let queue = [];
+    if (this.root) {
+      queue.push(this.root);
+    }
+
+    while (queue.length > 0) {
+      let getNode = queue.shift();
+      callback(getNode);
+
+      if (getNode.leftChild) {
+        queue.push(getNode.leftChild);
+      }
+      if (getNode.rightChild) {
+        queue.push(getNode.rightChild);
+      }
+    }
   }
 
   //left - root - right
@@ -163,7 +184,7 @@ export class Tree {
       throw new Error("Callback must be a function");
     }
 
-    _inOrderForEach(callback, this.root);
+    return this._inOrderForEach(callback, this.root);
   }
   _inOrderForEach(callback, currentNode) {
     //base case
@@ -182,7 +203,7 @@ export class Tree {
     }
 
     //start recursion at the root node with helper function
-    this._preOrderForEach(callback, this.root);
+    return this._preOrderForEach(callback, this.root);
   }
 
   _preOrderForEach(callback, currentNode) {
@@ -201,7 +222,7 @@ export class Tree {
       throw new Error("Callback must be a function");
     }
 
-    _postOrderForEach(callback, this.root);
+    return this._postOrderForEach(callback, this.root);
   }
   _postOrderForEach(callback, currentNode) {
     //base case
@@ -278,7 +299,7 @@ export class Tree {
 
   rebalance() {
     let sortedArray = [];
-    this.inOrderForEach((value) => sortedArray.push(value));
+    this.inOrderForEach((node) => sortedArray.push(node.value));
     this.root = this.buildTree(sortedArray);
   }
 }

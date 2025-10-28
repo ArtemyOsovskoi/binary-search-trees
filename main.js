@@ -1,27 +1,38 @@
-import { Tree } from "./script";
+import Tree from "./script.js";
 
 const prettyPrint = (node, prefix = "", isLeft = true) => {
-  if (node === null) {
-    return;
+  if (node === null) return;
+  if (node.rightChild !== null) {
+    prettyPrint(node.rightChild, `${prefix}${isLeft ? "|   " : "    "}`, false);
   }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
-  }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+  console.log(`${prefix}${isLeft ? "\\-- " : "/-- "}${node.value}`);
+  if (node.leftChild !== null) {
+    prettyPrint(node.leftChild, `${prefix}${isLeft ? "    " : "|   "}`, true);
   }
 };
 
 function randomArray() {
+  const set = new Set();
   let randomLength = Math.floor(Math.random() * 100) + 1;
-  let array = [];
-  for (let index = 0; index < randomLength; index++) {
-    array.push(Math.floor(Math.random() * 100) + 1);
+  while (set.size < randomLength) {
+    set.add(Math.floor(Math.random() * 99) + 1);
   }
-  return array;
+  return Array.from(set).sort((a, b) => a - b);
 }
 
-//let randomArray = [0, 5, 12, 41, 22, 72, 89, 41, 33, 51, 6, 2, 14];
-let newTree = new Tree(randomArray());
-console.log(newTree.isBalanced());
+function testingBST() {
+  let rArr = randomArray();
+  let newTree = new Tree(rArr);
+  console.log("initial array:", rArr);
+  console.log("balanced initially?", newTree.isBalanced());
+
+  newTree.insert(240);
+  newTree.insert(555);
+  newTree.insert(419);
+  newTree.insert(872);
+  console.log("balanced after insertions?", newTree.isBalanced());
+
+  newTree.rebalance();
+  console.log("balanced after rebalance?", newTree.isBalanced());
+}
+testingBST();
